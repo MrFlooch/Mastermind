@@ -6,3 +6,10 @@ C:\Users\pn31vgu\source\repos\MasterMind\MasterMind\obj\Debug\MasterMind.csproj.
 C:\Users\pn31vgu\source\repos\MasterMind\MasterMind\obj\Debug\MasterMind.csproj.CoreCompileInputs.cache
 C:\Users\pn31vgu\source\repos\MasterMind\MasterMind\obj\Debug\MasterMind.exe
 C:\Users\pn31vgu\source\repos\MasterMind\MasterMind\obj\Debug\MasterMind.pdb
+D:\Programmation\MasterMind\MasterMind\bin\Debug\MasterMind.exe.config
+D:\Programmation\MasterMind\MasterMind\bin\Debug\MasterMind.exe
+D:\Programmation\MasterMind\MasterMind\bin\Debug\MasterMind.pdb
+D:\Programmation\MasterMind\MasterMind\obj\Debug\MasterMind.csprojAssemblyReference.cache
+D:\Programmation\MasterMind\MasterMind\obj\Debug\MasterMind.csproj.CoreCompileInputs.cache
+D:\Programmation\MasterMind\MasterMind\obj\Debug\MasterMind.exe
+D:\Programmation\MasterMind\MasterMind\obj\Debug\MasterMind.pdb
