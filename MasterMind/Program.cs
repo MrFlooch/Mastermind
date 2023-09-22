@@ -10,91 +10,204 @@ namespace MasterMind
     {
         static void Main(string[] args)
         {
+            String name;
+            String reponse = "o";
 
-            String name, reponse ="o";
 
-
-            
             //message de bienvenue guide pour selectionner le mode de jeu
             Console.Write("Bienvenue sur Mastermind! Veuillez entrer votre prénom: ");
             name = Console.ReadLine();
-            Console.WriteLine("Bonjour " + name + " que voulez-vous faire?");
+            Console.WriteLine("Bonjour " + name + " que voulez-vous faire?" + "\n");
 
             //permet de recommencer
             do
             {
-                Console.WriteLine("mode facile, tapez 1" + "\n" + "mode difficile, tapez 2" + "\n" + "voir les règles, tapez rules");
-                Console.ReadLine();
-
-                //mode facile
-                Console.Write("Couleurs possibles: GYWRBMC" + "\n" + "devine le code en 4 couleurs");
-                Console.Read();
+                int nb;
+                String reponse2;
+                bool hasHelped = false;
 
 
-                //n c'est le nombre qui va permettre de definir combien de fois le for va faire d'aller-retour avant de s'arreter
-                int n = 4;
 
-                //ca c'est pour generer l'aléatoire
-                var random = new Random();
-
-                string secret = "";
-                //i c'est le nombre qui va être répété par l'ordi pour se rapprocher de n, i++ ca veut dire en gros: a chaque fois que tu compte i tu en rajoute un apres
-                for (int i = 0; i < n; i++)
+                //permet de ne pas inscrir autre chose que 1, 2 ou 3
+                do
                 {
+                    Console.WriteLine("[1] mode facile" + "\n" + "[2] mode difficile" + "\n" + "[3] règles" + "\n");
+                    reponse2 = Console.ReadLine();
+                    nb = Convert.ToInt32(reponse2);
 
-                    //avec ca le programme peut générer aleatoirement un code avec les lettres proposer
-                    var symbolIndex = random.Next(7);
+                } while (nb < 1 || nb > 3);
 
-                    if (symbolIndex == 0)
+
+                if (reponse2 == "3")
+                {
+                    //règles
+                    Console.WriteLine("\n" + "******************************************************************************************************************" + "\n" + "******************************************************************************************************************");
+                    Console.WriteLine("Vous devez trouver la combianaison de couleur secrete avec les couleurs suivantes : G (vert), Y (jaune), W (blanc)" + "\n" + "R(rouge), B(bleu), M(magenta) et C(cyan)");
+                    Console.WriteLine("Si vous placez une ou plusieurs couleurs correctement, la console vous l'indiquera avec au terme *juste* suivit du" + "\n" + "nombre de couleur bien placée.");
+                    Console.WriteLine("Si vous placez une ou plusieurs bonnes couleurs mais pas au bon endroit, la console vous l'indiquera avec le terme" + "\n" + "* presque* suivit du nombre de couleur correcte.");
+                    Console.WriteLine("******************************************************************************************************************" + "\n" + "******************************************************************************************************************" + "\n");
+
+                    hasHelped = true;
+                }
+
+
+                else if (reponse2 == "1")
+                {
+                    //mode facile
+                    Console.WriteLine("\n" + "Couleurs possibles: GYWRBMC" + "\n" + "Trouvez le code en 4 couleurs" + "\n");
+
+
+
+                    //n c'est le nombre qui va permettre de definir combien de fois le for va faire d'aller-retour avant de s'arreter
+                    int n = 4;
+
+                    //ca c'est pour generer l'aléatoire
+                    var random = new Random();
+
+                    string secret = "";
+                    //i c'est le nombre qui va être répété par l'ordi pour se rapprocher de n, i++ ca veut dire en gros: a chaque fois que tu compte i tu en rajoute un apres
+                    for (int i = 0; i < n; i++)
                     {
-                        secret = secret + "G";
+
+                        //avec ca le programme peut générer aleatoirement un code avec les lettres proposer
+                        var symbolIndex = random.Next(7);
+
+                        if (symbolIndex == 0)
+                        {
+                            secret = secret + "G";
+                        }
+
+                        else if (symbolIndex == 1)
+                        {
+                            secret = secret + "Y";
+                        }
+
+                        else if (symbolIndex == 2)
+                        {
+                            secret = secret + "W";
+                        }
+
+                        else if (symbolIndex == 3)
+                        {
+                            secret = secret + "R";
+                        }
+
+                        else if (symbolIndex == 4)
+                        {
+                            secret = secret + "B";
+                        }
+
+                        else if (symbolIndex == 5)
+                        {
+                            secret = secret + "M";
+                        }
+
+                        else if (symbolIndex == 6)
+                        {
+                            secret = secret + "C";
+                        }
+
                     }
 
-                    else if (symbolIndex == 1)
-                    {
-                        secret = secret + "Y";
-                    }
+                    //Console.WriteLine($"secret is:{secret}");
 
-                    else if (symbolIndex == 2)
-                    {
-                        secret = secret + "W";
-                    }
+                    //ca c'est pour les essaies
+                    int g = 10;
+                    String input;
 
-                    else if (symbolIndex == 3)
-                    {
-                        secret = secret + "R";
-                    }
+                    //message du nombre d'essaie actuel
+                    for (int j = 0; j < g; j++)
+                       {
 
-                    else if (symbolIndex == 4)
-                    {
-                        secret = secret + "B";
-                    }
+                        Console.Write("Essaie no " + (j + 1) +" : ");
+                        input = Console.ReadLine();
 
-                    else if (symbolIndex == 5)
-                    {
-                        secret = secret + "M";
-                    }
-
-                    else if (symbolIndex == 6)
-                    {
-                        secret = secret + "C";
+                        if (secret == input) break;
                     }
 
                 }
 
-                Console.WriteLine($"secret is:{secret}");
 
-                //ca c'est pour les essaies
-                int g = 10;
-
-                for (int i = 0; i < g; i++)
+                else if (reponse2 == "2")
                 {
-                    if ()
+                    //mode facile
+                    Console.Write("Couleurs possibles: GYWRBMC" + "\n" + "devine le code en 6 couleurs");
+                    Console.Read();
+
+
+                    //n c'est le nombre qui va permettre de definir combien de fois le for va faire d'aller-retour avant de s'arreter
+                    int n = 6;
+
+                    //ca c'est pour generer l'aléatoire
+                    var random = new Random();
+
+                    string secret = "";
+                    //i c'est le nombre qui va être répété par l'ordi pour se rapprocher de n, i++ ca veut dire en gros: a chaque fois que tu compte i tu en rajoute un apres
+                    for (int i = 0; i < n; i++)
+                    {
+
+                        //avec ca le programme peut générer aleatoirement un code avec les lettres proposer
+                        var symbolIndex = random.Next(7);
+
+                        if (symbolIndex == 0)
+                        {
+                            secret = secret + "G";
+                        }
+
+                        else if (symbolIndex == 1)
+                        {
+                            secret = secret + "Y";
+                        }
+
+                        else if (symbolIndex == 2)
+                        {
+                            secret = secret + "W";
+                        }
+
+                        else if (symbolIndex == 3)
+                        {
+                            secret = secret + "R";
+                        }
+
+                        else if (symbolIndex == 4)
+                        {
+                            secret = secret + "B";
+                        }
+
+                        else if (symbolIndex == 5)
+                        {
+                            secret = secret + "M";
+                        }
+
+                        else if (symbolIndex == 6)
+                        {
+                            secret = secret + "C";
+                        }
+
+                    }
+
+                    Console.WriteLine($"secret is:{secret}");
+
+                    //ca c'est pour les essaies
+                    int g = 10;
+
+                    for (int j = 0; j < g; j++)
+                    {
+
+                    }
+
                 }
 
+                //pour revenir du menu [r] sans avoir à le demander
+                if (hasHelped == false)
+                {
 
-                Console.WriteLine("Voulez-vous reessayer ? [o/n] : ");
-                reponse = Console.ReadLine();
+                    Console.Write("Voulez-vous reessayer ? [o/n] : ");
+                    reponse = Console.ReadLine();
+                    Console.WriteLine();
+                }
+
+                
 
             } while (reponse == "o") ;
            
