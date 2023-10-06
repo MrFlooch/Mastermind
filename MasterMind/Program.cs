@@ -23,7 +23,7 @@ namespace MasterMind
             do
             {
                 int nb;
-                String reponse2;
+                String gameMode;
                 bool hasHelped = false;
 
 
@@ -32,26 +32,27 @@ namespace MasterMind
                 do
                 {
                     Console.WriteLine("[1] mode facile" + "\n" + "[2] mode difficile" + "\n" + "[3] règles" + "\n");
-                    reponse2 = Console.ReadLine();
-                    nb = Convert.ToInt32(reponse2);
+                    gameMode = Console.ReadLine();
+                    nb = Convert.ToInt32(gameMode);
 
                 } while (nb < 1 || nb > 3);
 
 
-                if (reponse2 == "3")
+                if (gameMode == "3")
                 {
                     //règles
                     Console.WriteLine("\n" + "******************************************************************************************************************" + "\n" + "******************************************************************************************************************");
-                    Console.WriteLine("Vous devez trouver la combianaison de couleur secrete avec les couleurs suivantes : G (vert), Y (jaune), W (blanc)" + "\n" + "R(rouge), B(bleu), M(magenta) et C(cyan)");
-                    Console.WriteLine("Si vous placez une ou plusieurs couleurs correctement, la console vous l'indiquera avec au terme *juste* suivit du" + "\n" + "nombre de couleur bien placée.");
-                    Console.WriteLine("Si vous placez une ou plusieurs bonnes couleurs mais pas au bon endroit, la console vous l'indiquera avec le terme" + "\n" + "* presque* suivit du nombre de couleur correcte.");
+                    Console.WriteLine("Vous devez trouver la combianaison de couleur secrete avec les couleurs suivantes : G (vert), Y (jaune), W (blanc)" + "\n" + "R(rouge), B(bleu), M(magenta) et C(cyan)" + "\n");
+                    Console.WriteLine("Si vous placez une ou plusieurs couleurs correctement, la console vous l'indiquera et l'écrivant en dessous." + "\n");
+                    Console.WriteLine("Si vous placez une ou plusieurs bonnes couleurs mais pas au bon endroit, la console vous l'indiquera avec le terme" + "\n" + "*presque* suivit du nombre de couleur à corriger." + "\n");
+                    Console.WriteLine("Dans le mode facile [1], vous devez trouver la bonne combinaison de 4 couleurs." + "\n" + "Dans le mode difficile [2], vous devez trouver la bonne combinaison de 6 couleurs.");
                     Console.WriteLine("******************************************************************************************************************" + "\n" + "******************************************************************************************************************" + "\n");
 
                     hasHelped = true;
                 }
 
 
-                else if (reponse2 == "1")
+                else if (gameMode == "1")
                 {
                     //mode facile
                     Console.WriteLine("\n" + "Couleurs possibles: GYWRBMC" + "\n" + "Trouvez le code en 4 couleurs" + "\n");
@@ -109,7 +110,7 @@ namespace MasterMind
 
                     }
 
-                    //Console.WriteLine($"secret is:{secret}");
+                    Console.WriteLine($"secret is:{secret}");
 
                     //ca c'est pour les essaies
                     int g = 10;
@@ -117,22 +118,91 @@ namespace MasterMind
 
                     //message du nombre d'essaie actuel
                     for (int j = 0; j < g; j++)
-                       {
+                    {
 
-                        Console.Write("Essaie no " + (j + 1) +" : ");
-                        input = Console.ReadLine();
+                        Console.Write("Essaie no " + (j + 1) + " : ");
+                        input = Console.ReadLine().ToUpper();//ça permet de mettre l'entrée de lutilisateur en majuscule pour éviter que cela ne fonctionne pas
 
-                        if (secret == input) break;
+                        Console.WriteLine("\n");
+
+                        if (secret == input)
+                        {
+                            Console.WriteLine("\n" + "*******************************" + "\n" + "Félicitation, vous avez gagné !" + "\n" + "*******************************" + "\n");
+                            break;
+                        }
+
+                        else
+                        {
+                            int ok = 0;
+
+                            //si c'est juste
+                            if (input[0] == secret[0])
+                            {
+                                Console.Write(input[0]);
+                            }
+
+                            //si c'est faux
+                            if (input[0] != secret[0])
+                            {
+                                Console.Write("_");
+                            }
+
+                            //si c'est juste
+                            if (input[1] == secret[1])
+                            {
+                                Console.Write(input[1]);
+                            }
+                            //si c'est faux
+                            if (input[1] != secret[1])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[2] == secret[2])
+                            {
+                                Console.Write(input[2]);
+                            }
+                            //si c'est faux
+                            if (input[2] != secret[2])
+                            {
+                                Console.Write("_");
+                            }
+
+                            //si c'est juste
+                            if (input[3] == secret[3])
+                            {
+                                Console.Write(input[3]);
+                            }
+                            //si c'est faux
+                            if (input[3] != secret[3])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //pour les pas bien placés
+                            if (input[0] == secret[1])
+                            {
+                                Console.WriteLine("presque : " + ok++);
+                            }
+
+                            Console.WriteLine("\n");
+                        }
+
                     }
 
                 }
 
 
-                else if (reponse2 == "2")
+
+
+                else if (gameMode == "2")
                 {
                     //mode facile
-                    Console.Write("Couleurs possibles: GYWRBMC" + "\n" + "devine le code en 6 couleurs");
-                    Console.Read();
+                    Console.WriteLine("\n" + "Couleurs possibles: GYWRBMC" + "\n" + "devine le code en 6 couleurs" + "\n");
+
 
 
                     //n c'est le nombre qui va permettre de definir combien de fois le for va faire d'aller-retour avant de s'arreter
@@ -190,12 +260,102 @@ namespace MasterMind
 
                     //ca c'est pour les essaies
                     int g = 10;
+                    String input;
 
+                    //message du nombre d'essaie actuel
                     for (int j = 0; j < g; j++)
                     {
 
-                    }
+                        Console.Write("Essaie no " + (j + 1) + " : ");
+                        input = Console.ReadLine().ToUpper();//ça permet de mettre l'entrée de l'utilisateur en majuscule pour éviter que cela ne fonctionne pas
 
+
+
+                        if (secret == input)
+                        {
+                            Console.WriteLine("\n" + "*******************************" + "\n" + "Félicitation, vous avez gagné !" + "\n" + "*******************************" + "\n");
+                            break;
+                        }
+
+                        else
+                        {
+                            int ok = 0;
+
+                            //si c'est juste
+                            if (input[0] == secret[0])
+                            {
+                                Console.Write(input[0]);
+                            }
+
+                            //si c'est faux
+                            if (input[0] != secret[0])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[1] == secret[1])
+                            {
+                                Console.Write(input[1]);
+                            }
+                            //si c'est faux
+                            if (input[1] != secret[1])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[2] == secret[2])
+                            {
+                                Console.Write(input[2]);
+                            }
+                            //si c'est faux
+                            if (input[2] != secret[2])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[3] == secret[3])
+                            {
+                                Console.Write(input[3]);
+                            }
+                            //si c'est faux
+                            if (input[3] != secret[3])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[4] == secret[4])
+                            {
+                                Console.Write(input[4]);
+                            }
+                            //si c'est faux
+                            if (input[4] != secret[4])
+                            {
+                                Console.Write("_");
+                            }
+
+
+                            //si c'est juste
+                            if (input[5] == secret[5])
+                            {
+                                Console.Write(input[5]);
+                            }
+                            //si c'est faux
+                            if (input[5] != secret[5])
+                            {
+                                Console.Write("_");
+                            }
+
+                            Console.WriteLine("\n");
+                        }
+                    }
                 }
 
                 //pour revenir du menu [r] sans avoir à le demander
