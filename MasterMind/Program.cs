@@ -1,5 +1,5 @@
 ﻿//Author: Sierro Félix
-//Date: 13.10.2023
+//Date: 03.11.2023
 //Place: ETML - Vennes
 //Description: code for the game MasterMind
 
@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,12 +19,14 @@ namespace MasterMind
         static void Main(string[] args)
         {
             int userChoice = 0;
-            String name;
 
-            //Welcome message
+            //Welcome message and askes the user's name
             Console.Write("Bienvenue sur Mastermind! Veuillez entrer votre prénom: ");
-            name = Console.ReadLine();
-            Console.WriteLine("\nBonjour " + name + " que voulez-vous faire?" + "\n");
+            string name = Console.ReadLine();
+            Console.WriteLine("\nBonjour " + name + " que voulez-vous faire?\n");
+
+            //Allows the alignement of the * with the congratulation message 
+            string output = new string('*', name.Length);
 
             //Allows to go to the main menu
             do
@@ -42,7 +46,7 @@ namespace MasterMind
                 Console.WriteLine("[3] Règles");
                 Console.WriteLine("[4] Quitter\n");
 
-                //Allows to choose between 1, 2, 3 and for and nothing else
+                //Allows to choose between 1, 2, 3 and nothing else
                 while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 4)
                 {
                     Console.WriteLine("\nVeuillez entrer un chiffre entre 1 et 4\n");
@@ -55,17 +59,14 @@ namespace MasterMind
                 switch (choice)
                 {
                     case 1:
-                        Easy();
+                        Game(4);
                         break;
-
                     case 2:
-                        Hard();
+                        Game(6);
                         break;
-
                     case 3:
                         Rules();
                         break;
-
                     case 4:
                         Environment.Exit(0);
                         break;
@@ -78,26 +79,44 @@ namespace MasterMind
                 Console.Clear();
 
                 //Shows the rules
-                Console.WriteLine("\n******************************************************************************************************************\n******************************************************************************************************************");
-                Console.WriteLine("Vous devez trouver la combianaison de couleur secrete avec les couleurs suivantes : \nG (vert), Y (jaune), W (blanc), R (rouge), B (bleu), M (magenta) et C (cyan)\n\nCertain code peuvent comporter plusieurs fois la même couleur." +
-                                    "\n\nVous avez plusieurs essaies mais attention, vous n'en avez que 10\n");
-                Console.WriteLine("Si vous placez une ou plusieurs couleurs correctement, la console vous l'indiquera en écrivant et en indiquant le \nnombre de caractères correcte en-dessous à coté du terme *Ok*\n");
-                Console.WriteLine("Si vous placez une ou plusieurs bonnes couleurs mais pas au bon endroit, la console vous l'indiquera avec le terme\n*presque* suivit du nombre de couleur à corriger.\n");
-                Console.WriteLine("Dans le mode facile [1], vous devez trouver la bonne combinaison de 4 couleurs.\nDans le mode difficile [2], vous devez trouver la bonne combinaison de 6 couleurs.");
-                Console.WriteLine("******************************************************************************************************************\n******************************************************************************************************************\n");
+                Console.WriteLine("\n***********************************************************************************\n***********************************************************************************" +
+                                  "\nVous devez trouver la combinaison de couleurs secrètes avec les couleurs suivantes : \nG (vert), Y (jaune), W (blanc), R (rouge), B (bleu), M (magenta) et C (cyan)\n\nCertains codes peuvent comporter plusieurs fois la même couleur." +
+                                  "\n\nVous avez plusieurs essais, mais attention, vous n'en avez que 10.\n" +
+                                  "\nSi vous placez une ou plusieurs couleurs correctement, la console vous l'indiquera \navec le terme *ok* suivi du nombre de couleurs bien placées.\n" +
+                                  "\nSi vous placez une ou plusieurs bonnes couleurs mais pas au bon endroit, la console \nvous l'indiquera avec le terme *presque* suivi du nombre de couleurs à corriger.\n" +
+                                  "\nDans le mode facile [1], vous devez trouver la bonne combinaison de 4 couleurs.\nDans le mode difficile [2], vous devez trouver la bonne combinaison de 6 couleurs." +
+                                  "\n***********************************************************************************\n***********************************************************************************\n");
             }
 
-            //Easy mode
-            void Easy()
+            //Game
+            void Game(int n)
             {
                 //Clears the UI
                 Console.Clear();
 
-                //Shows the possibility of input
-                Console.WriteLine("Couleurs possibles: G Y W R B M C\nTrouvez le code en 4 couleurs\n");
+                //Changes the colors of the letters
+                ConsoleColor[] couleurs = {
+                ConsoleColor.Green, ConsoleColor.Yellow, ConsoleColor.White,
+                ConsoleColor.Red, ConsoleColor.Blue, ConsoleColor.Magenta, ConsoleColor.Cyan
+                };
+
+                char[] lettres = { 'G', 'Y', 'W', 'R', 'B', 'M', 'C' };
+
+                //Shows the possibility of input and changes the colors of the letters
+                Console.Write("Couleurs possibles : ");
+                for (int i = 0; i < couleurs.Length; i++)
+                {
+                    Console.ForegroundColor = couleurs[i];
+                    Console.Write(lettres[i] + " ");
+                }
+
+                Console.ResetColor();
+                if (n == 4)
+                    Console.Write("\n\nTrouvez le code en 4 couleurs\n");
+                else if (n == 6)
+                    Console.Write("\n\nTrouvez le code en 6 couleurs\n");
 
                 //Creates the random code with the allowed inputs
-                int n = 4;
                 var random = new Random();
                 char[] colors = { 'G', 'Y', 'W', 'R', 'B', 'M', 'C' };
 
@@ -120,24 +139,64 @@ namespace MasterMind
                 //Shows the remaining number of tries
                 for (int j = 0; j < g; j++)
                 {
+                    bool isValidInput;
+
                     //Limits the number of inputs to 4 and makes it possible for the input to be written in lower caps
                     do
                     {
-                        Console.Write("******************\nEssaie no " + (j + 1) + " : ");
+                        //Adds one stars for the 10th essay
+                        string stars = (j == 9) ? "*" : "";
+                        if (n == 4)
+                            Console.Write("\n******************" + stars + "\nEssai no " + (j + 1) + " : ");
+                        else if (n == 6)
+                            Console.Write("\n********************" + stars + "\nEssai no " + (j + 1) + " : ");
                         input = Console.ReadLine().ToUpper();
-                    } while (input.Length != 4);
+
+                        //Checks if the input is valid
+                        isValidInput = input.Length == n && input.All(c => colors.Contains(c));
+
+                    } while (input.Length != n);
+
+                    //Checks if the input is valid without showing the hint if the user has put a correct input
+                    if (!isValidInput)
+                    {
+                        if (n == 4) Console.Write("\n\n******************\n\n");
+                        else if (n == 6) Console.Write("\n\n********************\n\n");
+                        Console.WriteLine("\nVeuillez utiliser uniquement les couleurs à disposition.\n");
+                        j--;
+                    }
 
                     //Congratulation message
-                    if (secret == input)
+                    else if (secret == input)
                     {
-                        Console.WriteLine("\n*******************************\nFélicitation, vous avez gagné !\n*******************************\n\n\nQue voulez-vous faire maintenant ?\n");
+
+                        //Adds a * in the 10th try 
+                        string stars = (j == 9) ? "*" : "";
+                        if (n == 4) Console.Write("\n******************" + stars + "\n\n");
+                        else if (n == 6) Console.Write("\n********************" + stars + "\n\n");
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("\n**********************************" + output + "\n Félicitation " + name + ", vous avez gagné !\n**********************************" + output + "\n\n");
+                        Console.ResetColor();
+                        Console.WriteLine("Que voulez-vous faire maintenant ?\n");
+                        break;
+                    }
+
+                    else if (secret == input && j == 9)
+                    {
+                        if (n == 4) Console.Write("\n*********************\n\n");
+                        else if (n == 6) Console.Write("\n***********************\n\n");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("\n**********************************" + output + "\n Félicitation " + name + ", vous avez gagné !\n**********************************" + output + "\n\n");
+                        Console.ResetColor();
+                        Console.WriteLine("Que voulez-vous faire maintenant ?\n");
                         break;
                     }
 
                     //Losing message
                     else if (j == 9)
                     {
-                        Console.WriteLine("\n\nPas de chance, vous avez perdu.\n\nQue voulez-vous faire maintenant ?");
+                        Console.WriteLine("\n\nPas de chance, vous avez perdu. Le code secret était " + secret + ".\n\nQue voulez-vous faire maintenant ?\n");
                     }
 
                     else
@@ -164,45 +223,44 @@ namespace MasterMind
                                 inputLetterCounts[Array.IndexOf(colors, char.ToUpper(letter))]++;
                             }
                         }
-                        
+
                         for (int i = 0; i < secret.Length; i++)
                         {
-                            switch (colors[i])
-                            {
-                                case 'G':
-                                    Console.ForegroundColor = ConsoleColor.Green;
-                                    break;
-
-                                case 'Y':
-                                    Console.ForegroundColor = ConsoleColor.Yellow;
-                                    break;
-
-                                case 'W':
-                                    Console.ForegroundColor = ConsoleColor.Gray;
-                                    break;
-
-                                case 'R':
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    break;
-
-                                case 'B':
-                                    Console.ForegroundColor = ConsoleColor.Blue;
-                                    break;
-
-                                case 'M':
-                                    Console.ForegroundColor = ConsoleColor.Magenta;
-                                    break;
-
-                                case 'C':
-                                    Console.ForegroundColor = ConsoleColor.Cyan;
-                                    break;
-
-                            }
-
                             //Right color and right place
                             if (input[i] == secret[i])
                             {
+                                switch (secret[i])
+                                {
+                                    case 'G':
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        break;
+
+                                    case 'Y':
+                                        Console.ForegroundColor = ConsoleColor.Yellow;
+                                        break;
+
+                                    case 'W':
+                                        Console.ForegroundColor = ConsoleColor.White;
+                                        break;
+
+                                    case 'R':
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        break;
+
+                                    case 'B':
+                                        Console.ForegroundColor = ConsoleColor.Blue;
+                                        break;
+
+                                    case 'M':
+                                        Console.ForegroundColor = ConsoleColor.Magenta;
+                                        break;
+
+                                    case 'C':
+                                        Console.ForegroundColor = ConsoleColor.Cyan;
+                                        break;
+                                }
                                 Console.Write(input[i]);
+                                Console.ResetColor();
                                 ok++;
                             }
 
@@ -213,7 +271,6 @@ namespace MasterMind
                                 Console.ResetColor();
                             }
                         }
-
                         //Right color but in the wrong place
                         for (int i = 0; i < colors.Length; i++)
                         {
@@ -221,122 +278,13 @@ namespace MasterMind
                         }
 
                         notOk -= ok;
-                        
                         Console.WriteLine("\nok : " + ok);
-                        Console.WriteLine("presque : " + notOk + "\n******************\n\n");
-
+                        if (n == 4) Console.WriteLine("presque : " + notOk + "\n******************\n\n");
+                        else if (n == 6) Console.WriteLine("presque : " + notOk + "\n********************\n\n");
                         Console.ResetColor();
-                    }
-                }
-            }
-
-            //Hard mode
-            void Hard()
-            {
-                //Clears the UI
-                Console.Clear();
-
-                //Shows the possibility of input
-                Console.WriteLine("Couleurs possibles: G Y W R B M C\nTrouvez le code en 6 couleurs\n");
-
-                //Creates the random code with the allowed inputs
-                int n = 6;
-                var random = new Random();
-                char[] colors = { 'G', 'Y', 'W', 'R', 'B', 'M', 'C' };
-
-                string secret = "";
-
-                //Lenght of the secret code
-                for (int i = 0; i < n; i++)
-                {
-                    var symbolIndex = random.Next(colors.Length);
-                    secret += colors[symbolIndex];
-                }
-
-                //Shows the secret code for the tests
-                //Console.WriteLine($"secret is:{secret}");
-
-                //Limits the number of tries
-                int g = 10;
-                String input;
-
-                //Shows the remaining number of tries
-                for (int j = 0; j < g; j++)
-                {
-                    //Limits the number of inputs to 4 and makes it possible for the input to be written in lower caps
-                    do
-                    {
-                        Console.Write("********************\nEssaie no " + (j + 1) + " : ");
-                        input = Console.ReadLine().ToUpper();
-                    } while (input.Length != 6);
-
-
-                    //Congratulation message
-                    if (secret == input)
-                    {
-                        Console.WriteLine("\n*******************************\nFélicitation, vous avez gagné !\n*******************************\n\n\nQue voulez-vous faire maintenant ?\n");
-                        break;
-                    }
-
-                    //Losing message
-                    else if (j == 9)
-                    {
-                        Console.WriteLine("\n\nPas de chance, vous avez perdu.\n\nQue voulez-vous faire maintenant ?");
-                    }
-
-                    else
-                    {
-                        int ok = 0;
-                        int notOk = 0;
-
-                        //Table that stocks the number of instances of every letters in the code and the user's input
-                        int[] secretLetterCounts = new int[colors.Length];
-                        int[] inputLetterCounts = new int[colors.Length];
-
-                        //Counts the number of letters in every letters in the code
-                        foreach (char letter in secret)
-                        {
-                            secretLetterCounts[Array.IndexOf(colors, letter)]++;
-                        }
-
-                        //Counts the number of instances of every letters in the user's input
-                        foreach (char letter in input)
-                        {
-                            //Checks if the input is a letter and if it is in the table
-                            if (char.IsLetter(letter) && Array.Exists(colors, element => element == char.ToUpper(letter)))
-                            {
-                                inputLetterCounts[Array.IndexOf(colors, char.ToUpper(letter))]++;
-                            }
-                        }
-
-                        for (int i = 0; i < secret.Length; i++)
-                        {
-                            //Right color and right place
-                            if (input[i] == secret[i])
-                            {
-                                ok++;
-                            }
-
-                            //Wrong color
-                            else if (input[i] != secret[i])
-                            {
-                            }
-                        }
-
-                        //Right color but in the wrong place
-                        for (int i = 0; i < colors.Length; i++)
-                        {
-                            notOk += Math.Min(secretLetterCounts[i], inputLetterCounts[i]);
-                        }
-
-                        notOk -= ok;
-
-                        Console.WriteLine("\nok : " + ok);
-                        Console.WriteLine("presque : " + notOk + "\n********************\n\n");
                     }
                 }
             }
         }
     }
 }
-
